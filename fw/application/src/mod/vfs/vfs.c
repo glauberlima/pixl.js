@@ -5,7 +5,7 @@
 
 typedef struct {
     bool enabled;
-    const vfs_driver_t *p_driver;
+    vfs_driver_t *p_driver;
 } vfs_drive_item_t;
 
 static const vfs_drive_item_t vfs_drive_items[VFS_DRIVE_MAX] = {

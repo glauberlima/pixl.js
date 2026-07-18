@@ -17,6 +17,6 @@ void mui_u8g2_set_lcd_default_contrast_level(void);
 
 void mui_u8g2_set_contrast_level(uint8_t value);
 
-const spi_device_t* mui_u8g2_get_spi_device();
+spi_device_t* mui_u8g2_get_spi_device();
 
 #endif

@@ -37,7 +37,7 @@ static void mini_app_launcher_inst_run(mini_app_launcher_t *p_launcher, uint32_t
 }
 
 void mini_app_launcher_run_with_retain_data(mini_app_launcher_t *p_launcher, uint32_t id, uint8_t *retain_data) {
-    mini_app_t *p_app = mini_app_registry_find_by_id(id);
+    const mini_app_t *p_app = mini_app_registry_find_by_id(id);
     if (p_app == NULL) {
         return;
     }
