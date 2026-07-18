@@ -165,7 +165,7 @@ static void settings_scene_main_reload(void *user_data) {
     vfs_driver_t *p_driver = vfs_get_default_driver();
     vfs_stat_t stat = {0};
     int32_t res = p_driver->stat(&stat);
-    if (stat.avaliable) {
+    if (stat.available) {
         snprintf(txt, sizeof(txt), "[%s %02d%%]", _T(APP_SET_STORAGE_USED),
                  (uint8_t)((stat.total_bytes - stat.free_bytes) / (float)stat.total_bytes * 100));
     } else {
@@ -179,7 +179,7 @@ static void settings_scene_main_reload(void *user_data) {
 
 #ifdef LCD_SCREEN
     if (p_settings->lcd_backlight == 0) {
-        snprintf(txt, sizeof(txt), "%s", getLangString(_L_OFF_F));
+        snprintf(txt, sizeof(txt), "[%s]", getLangString(_L_OFF_F));
     } else {
         snprintf(txt, sizeof(txt), "[%d%%]", p_settings->lcd_backlight);
     }
@@ -192,7 +192,7 @@ static void settings_scene_main_reload(void *user_data) {
                                (void *)SETTINGS_MAIN_MENU_ANIM_ENABLED);
 
     mui_list_view_add_item_ext(app->p_list_view, 0xe08f, _T(APP_SET_LIPO_BAT),
-                               p_settings->bat_mode ? _T(ON_F) : _T(OFF_F), (void *)SETTINGS_MAIN_MENU_LI_MODE);
+                               p_settings->bat_mode ? "[LiPo]" : "[CR2032]", (void *)SETTINGS_MAIN_MENU_LI_MODE);
 
     mui_list_view_add_item_ext(app->p_list_view, 0xe1f3, _T(APP_SET_SHOW_MEM_USAGE),
                                p_settings->show_mem_usage ? _T(ON_F) : _T(OFF_F),
@@ -203,7 +203,7 @@ static void settings_scene_main_reload(void *user_data) {
                                (void *)SETTINGS_MAIN_MENU_ENABLE_HIBERNATE);
 
     if (nrf_pwr_mgmt_get_timeout() == 0) {
-        snprintf(txt, sizeof(txt), "%s", getLangString(_L_OFF_F));
+        snprintf(txt, sizeof(txt), "[%s]", getLangString(_L_OFF_F));
     } else if (nrf_pwr_mgmt_get_timeout() > 0 && nrf_pwr_mgmt_get_timeout() < 60) {
         snprintf(txt, sizeof(txt), "[%ds]", nrf_pwr_mgmt_get_timeout());
     } else {

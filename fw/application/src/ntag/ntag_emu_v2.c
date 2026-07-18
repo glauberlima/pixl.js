@@ -127,7 +127,7 @@ static void nfc_received_process(const uint8_t *p_data, size_t data_length, uint
         }
         break;
     case N2_CMD_WRITE:
-        // similar to write but with one extra paramter to specify the bank number
+        // similar to write but with one extra parameter to specify the bank number
         NRF_LOG_INFO("N2E Write slot:%d:", p_data[2]);
         data_length = 6;
         p_data = p_data + 1;

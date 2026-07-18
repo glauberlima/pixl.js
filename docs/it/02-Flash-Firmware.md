@@ -3,7 +3,7 @@ Dopo aver costruito o acquistato l'hardware, devi flashare il firmware per la pr
 Il firmware può essere flashato o aggiornato utilizzando uno dei seguenti metodi:
 
 ## Metodo 1: Cablato
-Questo metodo richiede un flasher compatibile con CMASS-DAP JLink o DAPLink. Raccomandiamo il programmatore STM32 PWLINK2 Lite Emulator, puoi comprarne uno per circa 9.9 yuan su [Taobao](https://item.taobao.com/item.htm?spm=a1z09.2.0.0.4b942e8deXyaQO&id=675067753017&_u=d2p75qfn774a "Taobao")
+Questo metodo richiede un flasher compatibile con CMSIS-DAP JLink o DAPLink. Raccomandiamo il programmatore STM32 PWLINK2 Lite Emulator, puoi comprarne uno per circa 9.9 yuan su [Taobao](https://item.taobao.com/item.htm?spm=a1z09.2.0.0.4b942e8deXyaQO&id=675067753017&_u=d2p75qfn774a "Taobao")
 
 Scarica l'ultima versione del pacchetto zip del firmware. Dovrebbe contenere i seguenti file:
 - fw_update.bat
@@ -61,7 +61,7 @@ Puoi utilizzare i seguenti metodi per recuperare o flashare la versione firmware
 
 ## Opzione 1: Flasha il firmware tramite connessione cablata
 
-Se hai a disposizione un programmatore JLink o DAPLink compatibile con CMASS-DAP, puoi utilizzare il [Metodo Cablato](Flash-Firmware#Method 1: Wired "Metodo Cablato") per flashare manualmente la versione firmware corretta.
+Se hai a disposizione un programmatore JLink o DAPLink compatibile con CMSIS-DAP, puoi utilizzare il [Metodo Cablato](Flash-Firmware#Method 1: Wired "Metodo Cablato") per flashare manualmente la versione firmware corretta.
 Se per errore programmi la versione sbagliata (LCD/OLED) sul tuo dispositivo, il dispositivo funzionerà ma non mostrerà informazioni sullo schermo, la retroilluminazione della versione LCD potrebbe accendersi.
 
 ## Opzione 2: Segui le sequenze di tasti speciali per entrare nuovamente nella modalità DFU e installare la versione corretta del firmware.

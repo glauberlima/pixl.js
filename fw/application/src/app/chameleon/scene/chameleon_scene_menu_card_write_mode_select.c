@@ -19,7 +19,7 @@ void chameleon_scene_menu_card_write_mode_select_on_event(mui_list_view_event_t 
     app_chameleon_t *app = p_list_view->user_data;
     switch (p_item->icon) {
     case ICON_DATA: {
-        uint8_t slot = (uint8_t)p_item->user_data;
+        uint8_t slot = (uint8_t)(uintptr_t)p_item->user_data;
         tag_emulation_change_slot(slot, false);
         nfc_tag_mf1_write_mode_t mode = mui_list_view_get_focus(p_list_view);
         nfc_tag_mf1_set_write_mode(mode);

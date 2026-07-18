@@ -66,9 +66,9 @@ void settings_scene_storage_on_enter(void *user_data) {
 #else
 #define mount_str getLangString(_L_MOUNTED_FFS)
 #endif
-        mui_list_view_add_item(app->p_list_view, 0xe1ca, stat.avaliable ? mount_str : getLangString(_L_NOT_MOUNTED),
+        mui_list_view_add_item(app->p_list_view, 0xe1ca, stat.available ? mount_str : getLangString(_L_NOT_MOUNTED),
                                (void *)-1);
-        if (stat.avaliable) {
+        if (stat.available) {
             snprintf(txt, sizeof(txt), "[%d kB]", stat.total_bytes / 1024);
             mui_list_view_add_item_ext(app->p_list_view, 0xe1cb, getLangString(_L_TOTAL_SPACE), txt, (void *)-1);
             snprintf(txt, sizeof(txt), "[%d kB]", stat.free_bytes / 1024);

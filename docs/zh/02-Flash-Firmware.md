@@ -3,7 +3,7 @@
 固件可以使用以下方法之一刷写或更新：
 
 ## 方法 1: 线刷
-此方法需要一个兼容CMASS-DAP的JLink或DAPLink刷写器。我们推荐使用PWLINK2 Lite，您可以在 [淘宝](https://item.taobao.com/item.htm?spm=a1z09.2.0.0.4b942e8deXyaQO&id=675067753017&_u=d2p75qfn774a "Taobao")购买一个约9.9元。
+此方法需要一个兼容CMSIS-DAP的JLink或DAPLink刷写器。我们推荐使用PWLINK2 Lite，您可以在 [淘宝](https://item.taobao.com/item.htm?spm=a1z09.2.0.0.4b942e8deXyaQO&id=675067753017&_u=d2p75qfn774a "Taobao")购买一个约9.9元。
 
 下载最新版本的固件压缩包。它应该包含以下文件：
 - fw_update.bat
@@ -63,7 +63,7 @@ openocd -f interface/cmsis-dap.cfg -c "transport select swd" -f target/nrf52.cfg
 
 ## 方法1：通过有线连接刷写固件
 
-如果您手头有任何兼容CMASS-DAP的JLink或DAPLink编程器，您可以使用有线方法手动刷写正确的固件版本。
+如果您手头有任何兼容CMSIS-DAP的JLink或DAPLink编程器，您可以使用有线方法手动刷写正确的固件版本。
 
 
 ## 方法2：按照特殊的按键序列再次进入DFU模式，以刷写正确的固件版本。

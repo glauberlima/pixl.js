@@ -28,6 +28,8 @@ typedef enum {
     CHAMELEON_MENU_BACK,
 } chameleon_menu_item_t;
 
+void chameleon_scene_menu_card_advanced_reload(app_chameleon_t *app);
+
 void chameleon_scene_menu_card_advanced_on_event(mui_list_view_event_t event, mui_list_view_t *p_list_view,
                                                  mui_list_item_t *p_item) {
     app_chameleon_t *app = p_list_view->user_data;

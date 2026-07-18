@@ -46,12 +46,12 @@ void df_proto_handler_vfs_drive_list(df_event_t *evt) {
         if (vfs_drive_enabled(VFS_DRIVE_INT)) {
             vfs_driver_t *p_driver = vfs_get_driver(VFS_DRIVE_EXT);
 
-            if (p_driver->stat(&stat) == VFS_OK && !stat.avaliable) {
+            if (p_driver->stat(&stat) == VFS_OK && !stat.available) {
                 p_driver->mount();
             }
 
-            if (p_driver->stat(&stat) == VFS_OK && !stat.avaliable) {
-                buff_put_u8(&buff, stat.avaliable); // drive status code
+            if (p_driver->stat(&stat) == VFS_OK && !stat.available) {
+                buff_put_u8(&buff, stat.available); // drive status code
                 buff_put_char(&buff, 'I');          // drive label
                 buff_put_string(&buff, "Internal Flash");
                 buff_put_u32(&buff, stat.total_bytes); // total space
@@ -68,12 +68,12 @@ void df_proto_handler_vfs_drive_list(df_event_t *evt) {
         if (vfs_drive_enabled(VFS_DRIVE_EXT)) {
             vfs_driver_t *p_driver = vfs_get_driver(VFS_DRIVE_EXT);
 
-            if (p_driver->stat(&stat) == VFS_OK && !stat.avaliable) {
+            if (p_driver->stat(&stat) == VFS_OK && !stat.available) {
                 p_driver->mount();
             }
 
             if (p_driver->stat(&stat) == VFS_OK) {
-                buff_put_u8(&buff, stat.avaliable ? 0 : 1); // drive status code
+                buff_put_u8(&buff, stat.available ? 0 : 1); // drive status code
                 buff_put_char(&buff, 'E');                  // drive label
                 buff_put_string(&buff, "External Flash");
                 buff_put_u32(&buff, stat.total_bytes); // total space

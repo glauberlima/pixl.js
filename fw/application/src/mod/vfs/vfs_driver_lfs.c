@@ -179,7 +179,7 @@ int32_t vfs_lfs_format() {
 bool vfs_lfs_mounted() { return mounted; }
 
 int32_t vfs_lfs_stat(vfs_stat_t *p_stat) {
-    p_stat->avaliable = mounted;
+    p_stat->available = mounted;
     return lfs_storage_stat(&p_stat->total_bytes, &p_stat->free_bytes);
 }
 

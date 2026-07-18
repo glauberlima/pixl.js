@@ -19,7 +19,7 @@ void chameleon_scene_menu_card_slot_num_select_on_event(mui_list_view_event_t ev
     app_chameleon_t *app = p_list_view->user_data;
     switch (p_item->icon) {
     case ICON_DATA: {
-        tag_helper_set_slot_num((uint8_t)p_item->user_data);
+        tag_helper_set_slot_num((uint8_t)(uintptr_t)p_item->user_data);
         mui_scene_dispatcher_previous_scene(app->p_scene_dispatcher);
     } break;
 

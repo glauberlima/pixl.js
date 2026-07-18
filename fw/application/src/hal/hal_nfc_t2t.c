@@ -119,8 +119,8 @@ NRF_LOG_MODULE_REGISTER();
 #define NFCID1_SINGLE_SIZE 4u                    /**< Length of single size NFCID1 */
 #define NFCID1_DOUBLE_SIZE 7u                    /**< Length of double size NFCID1 */
 #define NFCID1_TRIPLE_SIZE 10u                   /**< Length of triple size NFCID1 */
-#define NFCID1_DEFAULT_LENGHT NFCID1_DOUBLE_SIZE /**< Length of NFCID1 if user does not provide one */
-#define NFCID1_MAX_LENGHT NFCID1_TRIPLE_SIZE     /**< Maximum length of NFCID1 */
+#define NFCID1_DEFAULT_LENGTH NFCID1_DOUBLE_SIZE /**< Length of NFCID1 if user does not provide one */
+#define NFCID1_MAX_LENGTH NFCID1_TRIPLE_SIZE     /**< Maximum length of NFCID1 */
 
 #define NFC_RX_BUFFER_SIZE 72u /**< NFC Rx data buffer size */
 #define NFC_SLP_REQ_CMD 0x50u  /**< NFC SLP_REQ command identifier */
@@ -171,7 +171,7 @@ static volatile bool m_slp_req_received = false;          /**< Flag indicating t
 static volatile bool m_field_on = false;                  /**< Flag indicating that NFC Tag field is present */
 static nrf_drv_clock_handler_item_t m_clock_handler_item; /**< Clock event handler item structure */
 static uint8_t m_nfcid1_length = 0; /**< Length of NFCID1 provided by user or 0 if not initialized yet */
-static uint8_t m_nfcid1_data[NFCID1_MAX_LENGHT] = {0}; /**< Content of NFCID1 */
+static uint8_t m_nfcid1_data[NFCID1_MAX_LENGTH] = {0}; /**< Content of NFCID1 */
 
 static uint8_t m_nrfx_irq_enabled = false; /**< Flag indicating if nrfx IRQs are enabled */
 
@@ -396,7 +396,7 @@ ret_code_t hal_nfc_setup(hal_nfc_callback_t callback, void *p_context) {
     m_nfc_lib_context = p_context;
 
     if (m_nfcid1_length == 0) {
-        m_nfcid1_length = NFCID1_DEFAULT_LENGHT;
+        m_nfcid1_length = NFCID1_DEFAULT_LENGTH;
         hal_nfc_nfcid1_default_bytes();
     }
 
@@ -638,7 +638,7 @@ ret_code_t hal_nfc_parameter_set(hal_nfc_param_id_t id, void *p_data, size_t dat
 ret_code_t hal_nfc_parameter_get(hal_nfc_param_id_t id, void *p_data, size_t *p_max_data_length) {
     if (id == HAL_NFC_PARAM_ID_NFCID1) {
         if (m_nfcid1_length == 0) {
-            m_nfcid1_length = NFCID1_DEFAULT_LENGHT;
+            m_nfcid1_length = NFCID1_DEFAULT_LENGTH;
             hal_nfc_nfcid1_default_bytes();
         }
 
@@ -673,7 +673,7 @@ ret_code_t hal_nfc_send(const uint8_t *p_data, size_t data_length) {
     }
 
     memcpy(m_nfc_buffer, p_data, NFC_BUFFER_SIZE);
-    /* Ignore previous TX END events, SW takes care only for data frames which tranmission is triggered in this function
+    /* Ignore previous TX END events, SW takes care only for data frames which transmission is triggered in this function
      */
     nrf_nfct_event_clear(&NRF_NFCT->EVENTS_TXFRAMEEND);
 

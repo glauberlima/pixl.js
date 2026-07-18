@@ -8,7 +8,7 @@ import csv
 
 class I18nFile:
     def __init__(self):
-        self.avaliable_languages = list()
+        self.available_languages = list()
         self.i18n_items = list()
 
 
@@ -28,7 +28,7 @@ def read_i18n_from_csv():
         for r in csv.reader(f):
             if first_line:
                 first_line = False
-                i18n.avaliable_languages = r[1:]
+                i18n.available_languages = r[1:]
             else:
                 i18n.i18n_items.append(r)
     return i18n
@@ -58,6 +58,6 @@ def write_i18n_language_c(i18n, idx, lang):
 i18n_file = read_i18n_from_csv()
 write_i18n_string_id_file(i18n_file)
 idx = 1
-for lang in i18n_file.avaliable_languages:
+for lang in i18n_file.available_languages:
     write_i18n_language_c(i18n_file, idx, lang)
     idx += 1

@@ -159,7 +159,7 @@ int32_t vfs_spiffs_format() {
 bool vfs_spiffs_mounted() { return SPIFFS_mounted(&fs); }
 
 int32_t vfs_spiffs_stat(vfs_stat_t *p_stat) {
-    p_stat->avaliable = SPIFFS_mounted(&fs);
+    p_stat->available = SPIFFS_mounted(&fs);
     SPIFFS_info(&fs, &p_stat->total_bytes, &p_stat->free_bytes);
     p_stat->free_bytes = p_stat->total_bytes - p_stat->free_bytes;
     return VFS_OK;

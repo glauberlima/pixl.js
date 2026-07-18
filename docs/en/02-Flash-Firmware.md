@@ -3,7 +3,7 @@ After you build the hardware you need to flash the firmware for the first time, 
 The firmware can be flashed or upgraded using one of the follow methods:
 
 ## Method 1: Wired
-This method requires a CMASS-DAP compatible JLink or DAPLink flasher.  We recommend PWLINK2 Lite Emulator STM32 Programmer, you can buy one for about 9.9 yuan on [Taobao](https://item.taobao.com/item.htm?spm=a1z09.2.0.0.4b942e8deXyaQO&id=675067753017&_u=d2p75qfn774a "Taobao")
+This method requires a CMSIS-DAP compatible JLink or DAPLink flasher.  We recommend PWLINK2 Lite Emulator STM32 Programmer, you can buy one for about 9.9 yuan on [Taobao](https://item.taobao.com/item.htm?spm=a1z09.2.0.0.4b942e8deXyaQO&id=675067753017&_u=d2p75qfn774a "Taobao")
 
 Download the latest version of the firmware zip package. It should contain next files:
 - fw_update.bat
@@ -22,7 +22,7 @@ openocd -f interface/cmsis-dap.cfg -c "transport select swd" -f target/nrf52.cfg
 After first flash is completed, subsequent firmware updates can be done via OTA.
 
 ## Method 2: OTA update
-This method is only applicable to Pixl.js devices that have been successfully programed via wired method.
+This method is only applicable to Pixl.js devices that have been successfully programmed via wired method.
 
 ### nRF Connect APP
 Install the nRF Connect application (you can find it on the both iOS and Android app stores).
@@ -57,13 +57,13 @@ Then press the `SELECT DEVICE` button on the page you should see a device called
 
 # Repair wrong firmware version.
 
-If by mistake you program the wrong version (LCD/OLED) on your device, the device will work but will no show information on screen, the backlight of the LCD version could turn on.
+If by mistake you program the wrong version (LCD/OLED) on your device, the device will work but will not show information on screen, the backlight of the LCD version could turn on.
 
 You can use following methods to recover or flash the correct firmware version.
 
 ## Option 1: Flash the firmware via wired connection
 
-If you have any CMASS-DAP compatible JLink or DAPLink programer on hand, you can use the [Wired Method](Flash-Firmware#Method 1: Wired "Wired Method") to flash the correct firmware version manually.
+If you have any CMSIS-DAP compatible JLink or DAPLink programmer on hand, you can use the [Wired Method](Flash-Firmware#Method 1: Wired "Wired Method") to flash the correct firmware version manually.
 
 
 ## Option 2: Follow special key sequences to enter the DFU mode again to flash correct firmware version.

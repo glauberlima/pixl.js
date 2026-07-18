@@ -61,7 +61,7 @@ typedef struct {
 } vfs_dir_t;
 
 typedef struct {
-    uint8_t avaliable;
+    uint8_t available;
     uint32_t total_bytes;
     uint32_t free_bytes;
 } vfs_stat_t;
