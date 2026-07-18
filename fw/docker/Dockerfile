@@ -8,11 +8,11 @@ RUN mkdir /builds && \
     apt-get autoremove -y && \
     apt-get clean
 
-RUN wget -O archive.tar.bz2 "https://developer.arm.com/-/media/Files/downloads/gnu/15.2.rel1/binrel/arm-gnu-toolchain-15.2.rel1-x86_64-arm-none-eabi.tar.xz" && \
+RUN wget -O archive.tar.bz2 "https://gitlab.arm.com/api/v4/projects/tooling%2Fgnu-toolchains-for-arm/packages/generic/gnu-toolchain/15.3.rel1/arm-gnu-toolchain-15.3.rel1-x86_64-arm-none-eabi.tar.xz" && \
     tar -vxf archive.tar.bz2 -C /opt && \
     rm archive.tar.bz2 
 
-ENV PATH=/opt/arm-gnu-toolchain-15.2.rel1-x86_64-arm-none-eabi/bin:$PATH
+ENV PATH=/opt/arm-gnu-toolchain-15.3.rel1-x86_64-arm-none-eabi/bin:$PATH
 
 WORKDIR /builds
 ENV LC_ALL=C.UTF-8 LANG=C.UTF-8
@@ -31,7 +31,7 @@ RUN wget "https://nsscprodmedia.blob.core.windows.net/prod/software-and-other-do
     rm nrf5_sdk_17.1.0_ddde560.zip 
 
 ENV NRF52_SDK_ROOT=/opt/nRF5_SDK_17.1.0_ddde560
-ENV GNU_INSTALL_ROOT=/opt/arm-gnu-toolchain-15.2.rel1-x86_64-arm-none-eabi/bin/
+ENV GNU_INSTALL_ROOT=/opt/arm-gnu-toolchain-15.3.rel1-x86_64-arm-none-eabi/bin/
 
 RUN cd /opt/nRF5_SDK_17.1.0_ddde560/external/micro-ecc && \
     sed 's/\r//g' build_all.sh > build_all2.sh && \
