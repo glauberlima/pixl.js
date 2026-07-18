@@ -590,7 +590,6 @@ INC_FOLDERS += \
   $(PROJ_DIR)/app/chameleon/scene \
   $(PROJ_DIR)/sdk/pwr_mgmt \
   $(COMP_DIR)/amiitool/include \
-  $(COMP_DIR)/mlib \
   $(COMP_DIR)/u8g2/csrc \
   $(COMP_DIR)/spiffs/src \
   $(COMP_DIR)/littlefs \
@@ -601,7 +600,6 @@ INC_FOLDERS += \
   $(CHAMELEON_ROOT)/application/src/rfid \
   $(CHAMELEON_ROOT)/application/src/rfid/nfctag \
   $(CHAMELEON_ROOT)/application/src/rfid/nfctag/hf \
-  $(CHAMELEON_ROOT)/application/src/utils \
   $(CHAMELEON_ROOT)/application/src \
   $(CHAMELEON_ROOT)/application/src/bsp \
   $(COMP_DIR)/chameleon-ultra/firmware/common
@@ -647,8 +645,10 @@ CFLAGS += -DM_USE_THREAD_BACKEND=0
 CFLAGS += -mcpu=cortex-m4
 CFLAGS += -mthumb -mabi=aapcs
 #CFLAGS += -Wall -Werror
-CFLAGS += -Wno-incompatible-pointer-types -Wno-int-conversion -Wno-implicit-function-declaration -Wno-discarded-qualifiers -Wno-stringop-overflow -Wno-useless-type-name-in-empty-declaration
+CFLAGS += -Wno-incompatible-pointer-types -Wno-int-conversion -Wno-implicit-function-declaration
 CFLAGS += -mfloat-abi=hard -mfpu=fpv4-sp-d16
+CFLAGS += -isystem $(COMP_DIR)/mlib
+CFLAGS += -isystem $(CHAMELEON_ROOT)/application/src/utils
 # keep every function in a separate section, this allows linker to discard unused ones
 CFLAGS += -ffunction-sections -fdata-sections -fno-strict-aliasing
 CFLAGS += -fno-builtin -fshort-enums

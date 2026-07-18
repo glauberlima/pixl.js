@@ -672,7 +672,9 @@ ret_code_t hal_nfc_send(const uint8_t *p_data, size_t data_length) {
         return NRF_ERROR_DATA_SIZE;
     }
 
-    memcpy(m_nfc_buffer, p_data, NFC_BUFFER_SIZE);
+    for (size_t i = 0; i < data_length; i++) {
+        m_nfc_buffer[i] = p_data[i];
+    }
     /* Ignore previous TX END events, SW takes care only for data frames which transmission is triggered in this function
      */
     nrf_nfct_event_clear(&NRF_NFCT->EVENTS_TXFRAMEEND);

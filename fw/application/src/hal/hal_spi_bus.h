@@ -7,7 +7,7 @@
 typedef struct {
     void *p_rx_buffer;
     uint32_t rx_length;
-    void *p_tx_buffer;
+    const void *p_tx_buffer;
     uint32_t tx_length;
 } spi_transaction_t;
 
