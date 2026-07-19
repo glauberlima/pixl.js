@@ -18,7 +18,7 @@ app_new.hex 为新的固件程序
 --application-version需要递增
 --hw-version固定52，如更新bl请与bl中数值保持一致
 --sd-req固定为0x0103，如更新softdevice请查看对应版本发行说明
-nrfutil pkg generate --application app_new.hex --application-version 2 --hw-version 52 --sd-req 0x0103 --key-file priv.pem appv2_sd112.zip
+nrfutil nrf5sdk-tools pkg generate --application app_new.hex --application-version 2 --hw-version 52 --sd-req 0x0103 --key-file priv.pem appv2_sd112.zip
 
 
 #### dfu:
