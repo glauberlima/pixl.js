@@ -16,13 +16,20 @@ Docs are in `docs/{en,zh,it}/`. The authoritative build story is `docs/en/03-Bui
 
 The firmware does NOT build on a host machine without the Nordic nRF5 SDK and the arm-none-eabi toolchain. Two supported routes:
 
-1. Docker (recommended, matches CI): `docker run -it --rm solosky/nrf52-sdk:latest`, then inside:
+1. Local (toolchain + SDK installed): source `fw/env.sh` first to set `GNU_INSTALL_ROOT`, `NRF52_SDK_ROOT`, and `PATH`, then build:
+   ```bash
+   source fw/env.sh
+   cd fw && make all BOARD=LCD   # or BOARD=OLED
+   ```
+   `fw/env.sh` expects the ARM toolchain at `$HOME/tools/arm-gnu-toolchain-15.3.rel1-x86_64-arm-none-eabi/` and the nRF5 SDK at `$HOME/tools/nRF5_SDK_17.1.0_ddde560`. Do NOT use `-j` with `make all` — parallel sub-makes cause linker errors (the `make[2]:` jobserver messages leak into linker input).
+
+2. Docker (recommended, matches CI): `docker run -it --rm solosky/nrf52-sdk:latest`, then inside:
    ```bash
    git clone https://github.com/solosky/pixl.js && cd pixl.js
    git submodule update --init --recursive
    cd fw && make all BOARD=OLED RELEASE=1     # or BOARD=LCD
    ```
-2. CI: `.github/workflows/pixl.js-fw.yml` runs `cd fw && make all RELEASE=1 APP_VERSION=$GITHUB_RUN_NUMBER BOARD=${{matrix.board}}` on `develop` and `neo_v2` branches.
+3. CI: `.github/workflows/pixl.js-fw.yml` runs `cd fw && make all RELEASE=1 APP_VERSION=$GITHUB_RUN_NUMBER BOARD=${{matrix.board}}` on `develop` and `neo_v2` branches.
 
 Key facts an agent would otherwise guess wrong:
 
