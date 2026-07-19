@@ -66,16 +66,39 @@ def collect_top_symbols(elf_path, top_count, max_symbol_size=None):
 
 
 def collect_object_totals(map_path):
+    # NOTE: GNU linker map files attribute the total size of merged sections
+    # (e.g. .rodata.str1.1 for string literals) to the first contributor only.
+    # This means the first object file in such a section gets overcounted and
+    # others are undercounted. Per-object sizes are best-effort estimates.
     map_text = map_path.read_text(encoding="utf-8", errors="ignore")
     marker = "Linker script and memory map"
     marker_index = map_text.find(marker)
     if marker_index >= 0:
         map_text = map_text[marker_index:]
 
+    HEADER_RE = re.compile(r"^\s*\.(text|rodata|data|bss)\b")
+    CONT_RE   = re.compile(
+        r"^\s+0x[0-9a-fA-F]+\s+0x([0-9a-fA-F]+)\s+(\S+\.o(?:\b|\)))"
+    )
+
     object_totals = {}
-    for _section, size_hex, object_path in MAP_ENTRY_RE.findall(map_text):
-        object_totals.setdefault(object_path.strip(), 0)
-        object_totals[object_path.strip()] += int(size_hex, 16)
+    current_section = None
+    for line in map_text.splitlines():
+        h = HEADER_RE.match(line)
+        if h:
+            current_section = h.group(1)
+            mc = CONT_RE.match(line)
+            if mc:
+                obj = mc.group(2).strip()
+                size = int(mc.group(1), 16)
+                object_totals[obj] = object_totals.get(obj, 0) + size
+            continue
+        if current_section:
+            mc = CONT_RE.match(line)
+            if mc:
+                obj = mc.group(2).strip()
+                size = int(mc.group(1), 16)
+                object_totals[obj] = object_totals.get(obj, 0) + size
     return object_totals
 
 

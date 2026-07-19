@@ -1,3 +1,5 @@
+# NOTE: changing BOARD or RELEASE requires 'make clean' first.
+# Make does not detect CFLAGS changes on existing .o files.
 PROJECT_NAME     := ble_app_blinky_pca10040_s132
 TARGETS          := pixljs
 OUTPUT_DIRECTORY := ../_build

@@ -1,3 +1,5 @@
+# NOTE: changing BOARD requires 'make clean' first.
+# Make does not detect CFLAGS changes on existing .o files.
 PROJECT_NAME     := secure_bootloader_ble_s112_pca10040
 TARGETS          := bootloader
 OUTPUT_DIRECTORY := ../_build
