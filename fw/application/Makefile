@@ -11,6 +11,10 @@ U8G2_ROOT := ../components/u8g2/csrc
 CHAMELEON_ROOT :=$(COMP_DIR)/chameleon-ultra/firmware
 
 APP_VERSION ?= 1
+# Derive an integer for nrfutil, which requires --application-version to be numeric.
+# Strips dotted separators (2.17.0 -> 2170) and any non-numeric suffix (2.17.0.test1 -> 2170).
+# The full APP_VERSION string still goes into the OTA zip filename below.
+APP_VERSION_NUM := $(shell echo "$(APP_VERSION)" | sed -E 's/^[vV]?([0-9.]+).*$$/\1/' | tr -d '.')
 RELEASE ?= 1
 BOARD ?= OLED
 FW_TOP_SYMBOLS ?= 20
@@ -739,13 +743,13 @@ sdk_config:
 
 version:
 	@cd ../ && python3 scripts/version_gen.py
-	@echo build: BOARD=$(BOARD) RELEASE=$(RELEASE) APP_VERSION=$(APP_VERSION)
+	@echo build: BOARD=$(BOARD) RELEASE=$(RELEASE) APP_VERSION=$(APP_VERSION) APP_VERSION_NUM=$(APP_VERSION_NUM)
 
 settingsgen: pixljs
-	nrfutil nrf5sdk-tools settings generate --family NRF52 --application $(OUTPUT_DIRECTORY)/pixljs.hex --application-version $(APP_VERSION) --bootloader-version 1 --bl-settings-version 1 $(OUTPUT_DIRECTORY)/settings.hex
+	nrfutil nrf5sdk-tools settings generate --family NRF52 --application $(OUTPUT_DIRECTORY)/pixljs.hex --application-version $(APP_VERSION_NUM) --bootloader-version 1 --bl-settings-version 1 $(OUTPUT_DIRECTORY)/settings.hex
 
 ota: pixljs
-	nrfutil nrf5sdk-tools pkg generate --application $(OUTPUT_DIRECTORY)/pixljs.hex --application-version $(APP_VERSION) --hw-version 52 --sd-req 0x0103 --key-file ../bootloader/priv.pem $(OUTPUT_DIRECTORY)/pixljs_ota_v$(APP_VERSION).zip
+	nrfutil nrf5sdk-tools pkg generate --application $(OUTPUT_DIRECTORY)/pixljs.hex --application-version $(APP_VERSION_NUM) --hw-version 52 --sd-req 0x0103 --key-file ../bootloader/priv.pem $(OUTPUT_DIRECTORY)/pixljs_ota_v$(APP_VERSION).zip
 
 full: settingsgen
 	mergehex --merge $(OUTPUT_DIRECTORY)/settings.hex $(OUTPUT_DIRECTORY)/bootloader.hex $(SDK_ROOT)/components/softdevice/s112/hex/s112_nrf52_7.2.0_softdevice.hex $(OUTPUT_DIRECTORY)/pixljs.hex --output $(OUTPUT_DIRECTORY)/pixljs_all.hex
