@@ -37,7 +37,9 @@
 // display config
 #define OLED_SCREEN
 #define OLED_SH1106
+#ifndef OLED_TYPE_SH1106
 #define OLED_TYPE_SH1106
+#endif
 #define OLED_TYPE sh1106
 
 //#define LCD

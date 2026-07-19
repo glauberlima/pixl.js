@@ -5,6 +5,7 @@ from urllib.request import urlopen
 import json
 import os
 import csv
+import ssl
 
 class Amiibo:
     def __init__(self):
@@ -37,7 +38,8 @@ def get_prorject_directory():
 
 def fetch_amiibo_from_api():
     try:
-        conn = urlopen("https://www.amiiboapi.com/api/amiibo/", timeout=5000)
+        ctx = ssl._create_unverified_context()
+        conn = urlopen("https://amiiboapi.org/api/amiibo", context=ctx, timeout=5000)
         body = json.loads(conn.read())
         amiibos = list()
         for ami in body["amiibo"]: 

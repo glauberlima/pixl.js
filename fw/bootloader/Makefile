@@ -231,11 +231,6 @@ bootloader: ASMFLAGS += -D__HEAP_SIZE=0
 # that may need symbols provided by these libraries.
 LIB_FILES += -lc -lnosys -lm
 
-# oled
-ifeq ($(OLED_TYPE), sh1106)
-  CFLAGS += -DOLED_TYPE_SH1106
-endif
-
 .PHONY: default help
 
 # Default target - first one defined

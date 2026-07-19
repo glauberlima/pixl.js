@@ -57,14 +57,12 @@ SRC_FILES += \
   $(SDK_ROOT)/modules/nrfx/drivers/src/prs/nrfx_prs.c \
   $(SDK_ROOT)/modules/nrfx/drivers/src/nrfx_clock.c \
   $(SDK_ROOT)/modules/nrfx/drivers/src/nrfx_gpiote.c \
-  $(SDK_ROOT)/modules/nrfx/drivers/src/prs/nrfx_prs.c \
   $(SDK_ROOT)/modules/nrfx/drivers/src/nrfx_spi.c \
   $(SDK_ROOT)/modules/nrfx/drivers/src/nrfx_spim.c \
   $(SDK_ROOT)/modules/nrfx/drivers/src/nrfx_wdt.c \
   $(SDK_ROOT)/modules/nrfx/drivers/src/nrfx_ppi.c \
   $(SDK_ROOT)/integration/nrfx/legacy/nrf_drv_ppi.c \
   $(SDK_ROOT)/integration/nrfx/legacy/nrf_drv_spi.c \
-  $(SDK_ROOT)/components/libraries/button/app_button.c \
   $(SDK_ROOT)/components/libraries/bsp/bsp.c \
   $(SDK_ROOT)/components/libraries/bsp/bsp_nfc.c \
   $(SDK_ROOT)/components/libraries/mem_manager/mem_manager.c \
@@ -333,10 +331,6 @@ SRC_FILES += \
   $(PROJ_DIR)/amiidb/db_search.c \
   $(PROJ_DIR)/sdk/nrfx/nrfx_nfct.c \
   $(PROJ_DIR)/sdk/pwr_mgmt/nrf_pwr_mgmt.c \
-  $(SDK_ROOT)/external/segger_rtt/SEGGER_RTT.c \
-  $(SDK_ROOT)/external/segger_rtt/SEGGER_RTT_Syscalls_GCC.c \
-  $(SDK_ROOT)/external/segger_rtt/SEGGER_RTT_printf.c \
-  $(SDK_ROOT)/modules/nrfx/mdk/system_nrf52.c \
   $(SDK_ROOT)/components/nfc/platform/nfc_platform.c \
   $(COMP_DIR)/amiitool/src/amiibo.c \
   $(COMP_DIR)/amiitool/src/drbg.c \
@@ -613,7 +607,7 @@ LIB_FILES += \
   $(SDK_ROOT)/components/nfc/t2t_lib/nfc_t2t_lib_gcc.a \
 # Optimization flags
 ifneq ($(RELEASE), 1)
-OPT = -O2 -g3
+OPT = -Os -g3
 else
 OPT = -Os -ffunction-sections -fdata-sections
 endif
@@ -745,10 +739,10 @@ version:
 	@cd ../ && python3 scripts/version_gen.py
 	@echo build: BOARD=$(BOARD) RELEASE=$(RELEASE) APP_VERSION=$(APP_VERSION)
 
-settingsgen:
+settingsgen: pixljs
 	nrfutil nrf5sdk-tools settings generate --family NRF52 --application $(OUTPUT_DIRECTORY)/pixljs.hex --application-version $(APP_VERSION) --bootloader-version 1 --bl-settings-version 1 $(OUTPUT_DIRECTORY)/settings.hex
 
-ota: 
+ota: pixljs
 	nrfutil nrf5sdk-tools pkg generate --application $(OUTPUT_DIRECTORY)/pixljs.hex --application-version $(APP_VERSION) --hw-version 52 --sd-req 0x0103 --key-file ../bootloader/priv.pem $(OUTPUT_DIRECTORY)/pixljs_ota_v$(APP_VERSION).zip
 
 full: settingsgen
@@ -785,7 +779,7 @@ flash_bmp:
 		-ex 'kill' \
 		$(OUTPUT_DIRECTORY)/pixljs.out
 
-size_report_files: $(OUTPUT_DIRECTORY)/pixljs.bin $(OUTPUT_DIRECTORY)/pixljs.out $(OUTPUT_DIRECTORY)/pixljs.map
+size_report_files: pixljs $(OUTPUT_DIRECTORY)/pixljs.bin $(OUTPUT_DIRECTORY)/pixljs.out $(OUTPUT_DIRECTORY)/pixljs.map
 	@python3 ../scripts/size_report.py summarize \
 		--bin $(OUTPUT_DIRECTORY)/pixljs.bin \
 		--elf $(OUTPUT_DIRECTORY)/pixljs.out \
