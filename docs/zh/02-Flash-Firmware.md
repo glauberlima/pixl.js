@@ -11,13 +11,13 @@
 - pixljs.hex
 - pixljs_all.hex
 - fw_readme.txt
-- pixjs_ota_v237.zip
+- pixljs_ota_v237.zip
 
-你需要确保连接好 3.3V、GND、SWDIO、SWDCLK这四根线。  使用文件中的  `fw_update.bat` 下载 `pixjs_all.hex` 文件.
+你需要确保连接好 3.3V、GND、SWDIO、SWDCLK这四根线。  使用文件中的  `fw_update.bat` 下载 `pixljs_all.hex` 文件.
 
 您也可以使用OpenOCD来刷写设备，以下是执行命令的示例:
 ```
-openocd -f interface/cmsis-dap.cfg -c "transport select swd" -f target/nrf52.cfg -d2 -c init -c "reset init" -c halt -c "nrf5 mass_erase" -c "program pixjs_all.hex verify" -c "program nrf52832_xxaa.hex verify" -c exit
+openocd -f interface/cmsis-dap.cfg -c "transport select swd" -f target/nrf52.cfg -d2 -c init -c "reset init" -c halt -c "nrf5 mass_erase" -c "program pixljs_all.hex verify" -c exit
 ```
 
 完成首次刷写后，后续的固件更新可以通过OTA进行。
@@ -34,9 +34,9 @@ openocd -f interface/cmsis-dap.cfg -c "transport select swd" -f target/nrf52.cfg
 
 打开手机上的“nRF Connect”应用，并连接到名为 `pixl dfu` 的设备以更新固件。
 
-在iOS上，压缩包中的固件为 `pixjs_ota_vxxx.zip` ，需要通过微信或QQ与nrfconnect应用共享。
+在iOS上，压缩包中的固件为 `pixljs_ota_vxxx.zip` ，需要通过微信或QQ与nrfconnect应用共享。
 
-在Android上，您可以使用屏幕右上角的DFU图标，选择 `Distribution packet (ZIP)` ，然后浏览存储中的 `pixjs_ota_vxxx.zip` 文件。
+在Android上，您可以使用屏幕右上角的DFU图标，选择 `Distribution packet (ZIP)` ，然后浏览存储中的 `pixljs_ota_vxxx.zip` 文件。
 
 ### Web方法
 下载与您设备版本相对应的最新固件zip包，并将其解压到一个目录中。
@@ -51,7 +51,7 @@ openocd -f interface/cmsis-dap.cfg -c "transport select swd" -f target/nrf52.cfg
 
 首先，您需要将您的pixl.js设备放置在“固件更新”模式下。为此，请选择`设置`，然后选择`固件更新`。 
 
-打开 [固件更新页面](https://thegecko.github.io/web-bluetooth-dfu).  从您提取固件包的文件夹中拖放或选择`pixljs_ota_xxx.zip`文件。
+打开 [固件更新页面](https://thegecko.github.io/web-bluetooth-dfu).  从您提取固件包的文件夹中拖放或选择`pixljs_ota_vxxx.zip`文件。
 然后在页面上点击 `SELECT DEVICE` 按钮，您应该看到一个名为`pixl dfu` 的设备，连接以开始固件升级过程。
 
 # 修复错误的固件版本
