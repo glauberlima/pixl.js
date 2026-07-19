@@ -3,10 +3,10 @@
 
 #include "mui_mem.h"
 
-#define M_MEMORY_ALLOC(ctx, type) mui_mem_malloc (sizeof (type))
-#define M_MEMORY_DEL(ctx, ptr)  mui_mem_free(ptr)
-#define M_MEMORY_REALLOC(ctx, type, ptr, o, n) (M_UNLIKELY ((n) > SIZE_MAX / sizeof(type)) ? NULL : mui_mem_realloc ((ptr), (n)*sizeof (type)))
-#define M_MEMORY_FREE(ctx, type, ptr, o) mui_mem_free(ptr)
+#define M_MEMORY_ALLOC(type) mui_mem_malloc (sizeof (type))
+#define M_MEMORY_DEL(ptr)  mui_mem_free(ptr)
+#define M_MEMORY_REALLOC(type, ptr, n) (M_UNLIKELY ((n) > SIZE_MAX / sizeof(type)) ? NULL : mui_mem_realloc ((ptr), (n)*sizeof (type)))
+#define M_MEMORY_FREE(ptr) mui_mem_free(ptr)
 
 
 #include "m-array.h"
