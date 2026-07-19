@@ -1,31 +1,179 @@
-# Build
+# Build Firmware from Source
 
-## Build with Github Actions
+## Overview
 
-You could download the latest develop build from Github Actions
+This document covers building the pixl.js firmware from source. The build produces firmware for two hardware variants: **OLED** (SH1106 1.3", default) and **LCD** (ST7735 1.8").
 
-https://github.com/solosky/pixl.js/actions
+Firmware components:
 
+- **Application** — main firmware with all apps (Amiibo, AmiiboDB, AmiiboLink, Chameleon, Player, Games, Settings)
+- **Bootloader** — secure BLE DFU bootloader for OTA updates
+- **SoftDevice** — Nordic S112 v7.2.0 BLE stack (binary, provided by the nRF5 SDK)
 
-## Build with customized Docker image
+The build is orchestrated by `fw/Makefile` and uses GCC + GNU Make.
 
-You could build the firmware using customized Docker image. 
+## Prerequisites
 
-```
-# create containers
+| Component | Version | Required? | Source |
+|---|---|---|---|
+| ARM GCC toolchain | **15.3.rel1** | Yes | [Arm GNU Toolchain](https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads) |
+| nRF5 SDK | **17.1.0_ddde560** | Yes | [Nordic](https://www.nordicsemi.com/Software-and-tools/Software/nRF5-SDK) (free registration) |
+| nrf-command-line-tools | **10.24.2** | For flashing/OTA | [Nordic](https://www.nordicsemi.com/Products/Development-tools/nrf-command-line-tools) |
+| nrfutil | latest | For OTA | [Nordic download portal](https://files.nordicsemi.com/) |
+| Python 3 | 3.8+ | For code generation | [python.org](https://python.org) |
+| GNU Make | any | Yes | Preinstalled on most Linux distributions |
+| Git | any | Yes | [git-scm.com](https://git-scm.com) |
+
+## Environment Variables
+
+The build system reads these environment variables. Source `fw/env.sh` to set them automatically.
+
+| Variable | Required? | Typical value | Purpose |
+|---|---|---|---|
+| `NRF52_SDK_ROOT` | **Yes** | `$HOME/tools/nRF5_SDK_17.1.0_ddde560` | Root of the nRF5 SDK. Used by both Makefiles as `$(SDK_ROOT)`. |
+| `GNU_INSTALL_ROOT` | **Yes** | `$HOME/tools/arm-gnu-toolchain-15.3.rel1-x86_64-arm-none-eabi/bin/` | Path to ARM GCC binaries (with trailing `/`). SDK's `Makefile.common` resolves `$(GNU_INSTALL_ROOT)arm-none-eabi-gcc` from this. |
+| `NRF_COMMAND_LINE_TOOLS_ROOT` | For flashing | `/opt/nrf-command-line-tools` | Path to nrf-command-line-tools. Adds `nrfjprog` and `mergehex` to `PATH`. |
+| `PATH` (extended) | **Yes** | Include `$GNU_INSTALL_ROOT` and `$NRF_COMMAND_LINE_TOOLS_ROOT/bin` | Required for the compiler and Nordic tools. |
+
+## Method 1: Docker (Recommended)
+
+The Docker image `solosky/nrf52-sdk:latest` (built from `fw/docker/Dockerfile`) contains all dependencies pre-installed.
+
+```bash
+# Create container
 docker run -it --rm solosky/nrf52-sdk:latest
 
-# init repository
-root@b10d54636088:/builds# git clone https://github.com/solosky/pixl.js
-root@b10d54636088:/builds# cd pixl.js
-root@b10d54636088:/builds/pixl.js# git submodule update --init --recursive
+# Clone the repository
+git clone https://github.com/solosky/pixl.js
+cd pixl.js
 
-# build LCD version
-root@b10d54636088:/builds/pixl.js# cd fw && make all BOARD=LCD RELEASE=1
+# Initialize submodules
+git submodule update --init --recursive
 
-# build OLED version
-root@b10d54636088:/builds/pixl.js# cd fw && make all BOARD=OLED RELEASE=1
+# Build for OLED (recommended)
+cd fw && make all BOARD=OLED RELEASE=1
 
+# Or build for LCD
+cd fw && make all BOARD=LCD RELEASE=1
 ```
 
-The firmware is fw/_build/pixjs_all.hex，ota package is fw/_build/pixjs_ota_vXXXX.zip
+## Method 2: Native Build (Linux)
+
+### 1. Install the ARM GCC toolchain
+
+```bash
+# Download (adjust URL if needed)
+wget https://developer.arm.com/-/media/Files/downloads/gnu/15.3.rel1/binrel/arm-gnu-toolchain-15.3.rel1-x86_64-arm-none-eabi.tar.xz
+sudo tar -xf arm-gnu-toolchain-15.3.rel1-x86_64-arm-none-eabi.tar.xz -C /opt
+
+# Verify
+/opt/arm-gnu-toolchain-15.3.rel1-x86_64-arm-none-eabi/bin/arm-none-eabi-gcc --version
+```
+
+### 2. Install the nRF5 SDK
+
+Download `nRF5_SDK_17.1.0_ddde560.zip` from Nordic's website (free registration required), then:
+
+```bash
+unzip nRF5_SDK_17.1.0_ddde560.zip -d $HOME/tools/
+```
+
+The SDK bundles a pre-compiled micro-ecc library. No additional build step is required.
+
+### 3. Install optional tools
+
+```bash
+# nrf-command-line-tools (for flashing and OTA)
+# Download the .deb from Nordic and install:
+sudo dpkg -i nrf-command-line-tools_10.24.2_amd64.deb
+
+# nrfutil (for OTA package generation)
+# Download from Nordic's portal and place in your PATH
+```
+
+### 4. Set up the environment and build
+
+```bash
+# Source the environment helper
+source fw/env.sh
+
+# If env.sh reports missing dependencies, install them first
+
+# Clone and build
+git clone https://github.com/solosky/pixl.js
+cd pixl.js
+git submodule update --init --recursive
+cd fw
+
+# Build for OLED
+make all BOARD=OLED RELEASE=1
+
+# Or build for LCD
+make all BOARD=LCD RELEASE=1
+```
+
+## Code Generation
+
+Some source files are auto-generated by Python scripts in `fw/scripts/`. After editing any data source, run `make gen` to regenerate:
+
+| Script | Generates | Data source |
+|---|---|---|
+| `amiibo_db_gen.py` | `amiidb/db_amiibo.c`, `db_game.c`, `db_link.c` | `fw/data/amiidb_*.csv` |
+| `i18n_gen.py` | `i18n/*.c`, `i18n/string_id.h` | `fw/data/i18n.csv` |
+| `font_data_gen.py` | u8g2 font C files | `fw/data/*.bdf` |
+| `resource_gen.py` | App icons | `fw/resources/` |
+
+Python dependencies: `pip install -r fw/scripts/requirements.txt`
+
+**Do not edit the generated files directly.** Edit the data sources and re-run `make gen`.
+
+## Board Variants
+
+| `BOARD=` | Display | Default in | Notes |
+|---|---|---|---|
+| `OLED` | SH1106 OLED 1.3" | `fw/application/Makefile` | Recommended for most users |
+| `LCD` | ST7735 LCD 1.8" | `fw/bootloader/Makefile` | Original Espruino-compatible hardware |
+
+**`BOARD` is a compile-time define** (`-DBOARD_$(BOARD)`), not a runtime choice. The bootloader and application must be built for the same board. Do not mix an LCD application with an OLED bootloader.
+
+## Build Outputs
+
+All outputs land in `fw/_build/`:
+
+| File | Contents | Used for |
+|---|---|---|
+| `pixljs.hex` | Application only | Partial updates, debugging |
+| `bootloader.hex` | Secure BLE DFU bootloader | Bootloader flashing |
+| `pixljs_all.hex` | SoftDevice + Bootloader + App | First-time wired flashing |
+| `pixljs_ota_v*.zip` | OTA DFU package | Wireless updates |
+| `pixljs.out` | ELF with debug symbols | Debugging |
+| `fw_readme.txt` | Release notes (Chinese) | Shipping |
+| `fw_update.bat` | Windows flashing script | Wired flashing |
+
+## Make Targets
+
+| Target | Description |
+|---|---|
+| `make all` | Build bootloader + application + OTA package |
+| `make bl` | Build bootloader only |
+| `make app` | Build application only |
+| `make ota` | Generate OTA DFU package from existing hex |
+| `make full` | Merge softdevice + bootloader + app + settings into `pixljs_all.hex` |
+| `make version` | Regenerate `version.inc.h` from git |
+| `make gen` | Regenerate all auto-generated sources (amiibo DB, i18n, fonts, icons) |
+| `make flash_ocd` | Build + flash application via OpenOCD |
+| `make flash_all_ocd` | Build + flash full image via OpenOCD |
+| `make clean` | Remove build artifacts |
+| `make privgen` | Generate DFU signing key pair |
+
+## Troubleshooting
+
+| Symptom | Likely cause |
+|---|---|
+| `arm-none-eabi-gcc: command not found` | `GNU_INSTALL_ROOT` not set or not in `PATH` |
+| `fatal error: sdk_config.h: No such file or directory` | `NRF52_SDK_ROOT` not set or wrong SDK version |
+| `chameleon-ultra/ ... No such file or directory` | Forgot `git submodule update --init --recursive` |
+| `make: nrfjprog: Command not found` | nrf-command-line-tools not installed or not in `PATH` |
+| `mergehex: command not found` | nrf-command-line-tools not installed |
+| Garbled or blank display after flashing | Wrong `BOARD` variant (LCD vs OLED mismatch) |
+| `region FLASH overflowed` | Application too large for available flash |
