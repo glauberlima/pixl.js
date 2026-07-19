@@ -17,9 +17,9 @@ ENV PATH=/opt/arm-gnu-toolchain-15.3.rel1-x86_64-arm-none-eabi/bin:$PATH
 WORKDIR /builds
 ENV LC_ALL=C.UTF-8 LANG=C.UTF-8
 
-RUN wget "https://nsscprodmedia.blob.core.windows.net/prod/software-and-other-downloads/desktop-software/nrf-command-line-tools/sw/versions-10-x-x/10-18-1/nrf-command-line-tools_10.18.1_amd64.deb" -O nrf-command-line-tools_10.18.1_amd64.deb && \
-    dpkg -i nrf-command-line-tools_10.18.1_amd64.deb && \
-    rm nrf-command-line-tools_10.18.1_amd64.deb  
+RUN wget "https://nsscprodmedia.blob.core.windows.net/prod/software-and-other-downloads/desktop-software/nrf-command-line-tools/sw/versions-10-x-x/10-24-2/nrf-command-line-tools_10.24.2_amd64.deb" -O nrf-command-line-tools_10.24.2_amd64.deb && \
+    dpkg -i nrf-command-line-tools_10.24.2_amd64.deb && \
+    rm nrf-command-line-tools_10.24.2_amd64.deb  
 
 
 RUN wget "https://github.com/NordicSemiconductor/pc-nrfutil/releases/download/v6.1.7/nrfutil-linux" -O /usr/bin/nrfutil && \
