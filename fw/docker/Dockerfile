@@ -22,7 +22,9 @@ RUN wget "https://nsscprodmedia.blob.core.windows.net/prod/software-and-other-do
     rm nrf-command-line-tools_10.24.2_amd64.deb  
 
 
-RUN wget "https://github.com/NordicSemiconductor/pc-nrfutil/releases/download/v6.1.7/nrfutil-linux" -O /usr/bin/nrfutil && \
+RUN wget --user-agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36" \
+    "https://files.nordicsemi.com/ui/api/v1/download?repoKey=swtools&path=external%2Fnrfutil%2Fexecutables%2Fx86_64-unknown-linux-gnu%2Fnrfutil&isNativeBrowsing=false" \
+    -O /usr/bin/nrfutil && \
     chmod +x /usr/bin/nrfutil
 
 

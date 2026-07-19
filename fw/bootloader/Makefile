@@ -263,5 +263,5 @@ flash: default
 	nrfjprog -f nrf52 --reset
 
 privgen:
-	nrfutil keys generate priv.pem
-	nrfutil keys display --key pk --format code priv.pem --out_file dfu_public_key.c
+	nrfutil nrf5sdk-tools keys generate priv.pem
+	nrfutil nrf5sdk-tools keys display --key pk --format code priv.pem --out_file dfu_public_key.c
