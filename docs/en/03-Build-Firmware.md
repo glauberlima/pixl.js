@@ -24,6 +24,32 @@ The build is orchestrated by `fw/Makefile` and uses GCC + GNU Make.
 | GNU Make | any | Yes | Preinstalled on most Linux distributions |
 | Git | any | Yes | [git-scm.com](https://git-scm.com) |
 
+## Build Optimization
+
+### ccache
+
+Install [ccache](https://ccache.dev) to dramatically speed up repeated builds.
+After the first full build, ccache caches compiled object files so that
+rebuilds (with unchanged sources) complete in seconds instead of minutes.
+
+The makefiles auto-detect ccache via `Makefile.common` — no configuration needed.
+
+```bash
+# Debian/Ubuntu
+sudo apt install ccache
+
+# Fedora
+sudo dnf install ccache
+
+# Arch Linux
+sudo pacman -S ccache
+
+# Verify
+ccache --version
+```
+
+After installing, the build will automatically use ccache — no Makefile changes required.
+
 ## Environment Variables
 
 The build system reads these environment variables. Source `fw/env.sh` to set them automatically.
